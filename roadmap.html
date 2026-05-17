@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Roadmap — Fullstack + IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,300;9..144,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #18181f;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text: #e8e6f0;
+  --muted: #7a7890;
+  --faint: #3a3850;
+
+  --p1: #a78bfa;
+  --p2: #7c3aed;
+  --g1: #34d399;
+  --g2: #059669;
+  --o1: #fb923c;
+  --o2: #ea580c;
+  --b1: #60a5fa;
+  --b2: #2563eb;
+  --y1: #fbbf24;
+  --y2: #d97706;
+
+  --ff-display: 'Fraunces', serif;
+  --ff-body: 'DM Sans', sans-serif;
+  --ff-mono: 'DM Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--ff-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+/* HEADER */
+header {
+  padding: 72px 0 48px;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-eyebrow {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-family: var(--ff-display);
+  font-size: clamp(36px, 6vw, 58px);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+h1 em {
+  font-style: italic;
+  color: var(--p1);
+}
+
+.header-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.meta-pill {
+  font-size: 12px;
+  font-family: var(--ff-mono);
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+}
+
+/* PROGRESS BAR */
+.progress-section { padding: 32px 0; }
+
+.progress-label {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-label span { color: var(--p1); }
+
+.progress-track {
+  height: 4px;
+  background: var(--bg3);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--p2), var(--p1));
+  transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+  width: 0%;
+}
+
+.week-dots {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.week-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid var(--border2);
+  background: var(--bg2);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.week-dot:hover { border-color: var(--p1); transform: scale(1.15); }
+.week-dot.done { background: var(--p2); border-color: var(--p1); }
+.week-dot.done::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--p1);
+  opacity: 0.5;
+}
+
+.dot-label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* PHASE BLOCK */
+.phases { padding: 16px 0 80px; }
+
+.phase {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+  background: var(--bg2);
+}
+
+.phase:hover { border-color: var(--border2); }
+.phase.active { border-color: var(--border2); }
+
+.phase-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.phase-num {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+.phase-title-group { min-width: 0; }
+
+.phase-title {
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.phase-subtitle {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+  font-family: var(--ff-mono);
+}
+
+.phase-duration {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.phase-toggle {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  flex-shrink: 0;
+}
+
+.phase.active .phase-toggle { transform: rotate(180deg); }
+
+/* phase colors */
+.phase[data-phase="1"] .phase-num { color: var(--p1); border-color: var(--p2); background: rgba(124,58,237,0.1); }
+.phase[data-phase="2"] .phase-num { color: var(--g1); border-color: var(--g2); background: rgba(5,150,105,0.1); }
+.phase[data-phase="3"] .phase-num { color: var(--o1); border-color: var(--o2); background: rgba(234,88,12,0.1); }
+.phase[data-phase="4"] .phase-num { color: var(--b1); border-color: var(--b2); background: rgba(37,99,235,0.1); }
+.phase[data-phase="5"] .phase-num { color: var(--y1); border-color: var(--y2); background: rgba(217,119,6,0.1); }
+
+/* PHASE BODY */
+.phase-body {
+  display: none;
+  padding: 0 24px 24px;
+}
+
+.phase.active .phase-body { display: block; }
+
+/* WIN BOX */
+.win-box {
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  border: 1px solid;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.win-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+.win-text { font-size: 13px; line-height: 1.6; }
+
+.win-text strong { display: block; font-weight: 500; font-size: 12px; font-family: var(--ff-mono); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+
+.phase[data-phase="1"] .win-box { background: rgba(124,58,237,0.06); border-color: rgba(167,139,250,0.2); }
+.phase[data-phase="1"] .win-box .win-icon, .phase[data-phase="1"] .win-text strong { color: var(--p1); }
+.phase[data-phase="2"] .win-box { background: rgba(5,150,105,0.06); border-color: rgba(52,211,153,0.2); }
+.phase[data-phase="2"] .win-box .win-icon, .phase[data-phase="2"] .win-text strong { color: var(--g1); }
+.phase[data-phase="3"] .win-box { background: rgba(234,88,12,0.06); border-color: rgba(251,146,60,0.2); }
+.phase[data-phase="3"] .win-box .win-icon, .phase[data-phase="3"] .win-text strong { color: var(--o1); }
+.phase[data-phase="4"] .win-box { background: rgba(37,99,235,0.06); border-color: rgba(96,165,250,0.2); }
+.phase[data-phase="4"] .win-box .win-icon, .phase[data-phase="4"] .win-text strong { color: var(--b1); }
+.phase[data-phase="5"] .win-box { background: rgba(217,119,6,0.06); border-color: rgba(251,191,36,0.2); }
+.phase[data-phase="5"] .win-box .win-icon, .phase[data-phase="5"] .win-text strong { color: var(--y1); }
+
+/* SPRINT GRID */
+.sprint-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.sprint {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  transition: border-color 0.2s;
+}
+
+.sprint:hover { border-color: var(--border2); }
+
+.sprint-weeks {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.sprint-name {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 5px;
+  line-height: 1.3;
+}
+
+.sprint-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+
+.tags { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.tag {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border2);
+  color: var(--faint);
+  color: #5a5875;
+}
+
+/* sprint accent color per phase */
+.phase[data-phase="1"] .sprint-weeks { color: var(--p1); }
+.phase[data-phase="2"] .sprint-weeks { color: var(--g1); }
+.phase[data-phase="3"] .sprint-weeks { color: var(--o1); }
+.phase[data-phase="4"] .sprint-weeks { color: var(--b1); }
+.phase[data-phase="5"] .sprint-weeks { color: var(--y1); }
+
+/* TDAH TIP */
+.tdah-tip {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+  align-items: flex-start;
+}
+
+.tdah-tip-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+.tdah-tip p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* CTA BUTTON */
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--ff-body);
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.cta-btn:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.2);
+  transform: translateY(-1px);
+}
+
+.cta-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* PHASE accent border-left on active */
+.phase[data-phase="1"].active { border-color: rgba(167,139,250,0.3); }
+.phase[data-phase="2"].active { border-color: rgba(52,211,153,0.3); }
+.phase[data-phase="3"].active { border-color: rgba(251,146,60,0.3); }
+.phase[data-phase="4"].active { border-color: rgba(96,165,250,0.3); }
+.phase[data-phase="5"].active { border-color: rgba(251,191,36,0.3); }
+
+/* SAVE NOTE */
+.save-note {
+  text-align: center;
+  padding: 32px 0;
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--faint);
+  border-top: 1px solid var(--border);
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+header, .progress-section, .phase {
+  animation: fadeUp 0.5s ease both;
+}
+.phase:nth-child(1) { animation-delay: 0.05s; }
+.phase:nth-child(2) { animation-delay: 0.1s; }
+.phase:nth-child(3) { animation-delay: 0.15s; }
+.phase:nth-child(4) { animation-delay: 0.2s; }
+.phase:nth-child(5) { animation-delay: 0.25s; }
+
+@media (max-width: 600px) {
+  .phase-header { grid-template-columns: auto 1fr auto; }
+  .phase-duration { display: none; }
+  .sprint-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <p class="header-eyebrow">roadmap personal</p>
+    <h1>Fullstack developer<br>+ <em>Inteligencia Artificial</em></h1>
+    <div class="header-meta">
+      <span class="meta-pill">18 meses</span>
+      <span class="meta-pill">~1 hora diaria</span>
+      <span class="meta-pill">resultados rápidos</span>
+      <span class="meta-pill">adaptado para TDAH</span>
+      <span class="meta-pill">comunicación visual → código</span>
+    </div>
+  </header>
+
+  <div class="progress-section">
+    <div class="progress-label">
+      Progreso total <span id="progress-pct">0 / 72 semanas</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="week-dots" id="week-dots"></div>
+    <p class="dot-label">Haz clic en cada semana para marcarla como completada</p>
+  </div>
+
+  <div class="phases">
+
+    <!-- FASE 1 -->
+    <div class="phase active" data-phase="1">
+      <div class="phase-header" onclick="togglePhase(this)">
+        <div class="phase-num">1</div>
+        <div class="phase-title-group">
+          <div class="phase-title">Base visual: HTML, CSS y tu primera web</div>
+          <div class="phase-subtitle">fundamentos + portafolio publicado</div>
+        </div>
+        <div class="phase-duration">Meses 1–2</div>
+        <div class="phase-toggle">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5.5L8 10.5L13 5.5"/></svg>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="win-box">
+          <div class="win-icon">◆</div>
+          <div class="win-text">
+            <strong>victoria al terminar esta fase</strong>
+            Tendrás una página web real con tu nombre, publicada en internet con una URL propia. No es un ejercicio, es real y la puedes mostrar a cualquiera hoy mismo.
+          </div>
+        </div>
+        <div class="sprint-grid">
+          <div class="sprint">
+            <div class="sprint-weeks">Semanas 1–2</div>
+            <div class="sprint-name">HTML: la estructura</div>
+            <div class="sprint-desc">Aprende a pensar en bloques. Cada elemento es una caja. Tu background de diseño ya entiende esto instintivamente.</div>
+            <div class="tags"><span class="tag">headings</span><span class="tag">divs</span><span class="tag">listas</span><span class="tag">links</span></div>
+          </div>
+          <div class="sprint">
+            <div class="sprint-weeks">Semanas 3–4</div>
+            <div class="sprint-name">CSS: la forma visual</div>
+            <div class="sprint-desc">Colores, tipografía, espaciado. Tu ojo de diseñador te da una ventaja real aquí sobre el 90% de principiantes.</div>
+            <div class="tags"><span class="tag">flexbox</span><span class="tag">colores</span><span class="tag">fuentes</span><span class="tag">box model</span></div>
+          </div>
+          <div class="sprint">
+            <div class="sprint-weeks">Semanas 5–6</div>
+            <div class="sprint-name">Proyecto: portafolio v1</div>
+            <div class="sprint-desc">Una página con tu foto, tus proyectos de com. visual y una descripción. Simple pero completamente tuya.</div>
+            <div class="tags"><span class="tag">layout</span><span class="tag">responsive</span><span class="tag">GitHub Pages</span></div>
+          </div>
+          <div class="sprint">
+            <div class="sprint-weeks">Semanas 7–8</div>
+            <div class="sprint-name">Git + publicar en internet</div>
+            <div class="sprint-desc">Versiona tu código y publica tu portafolio. Al terminar esta semana tendrás una URL real en internet.</div>
+            <div class="tags"><span class="tag">git básico</span><span class="tag">GitHub</span><span class="tag">deploy</span></div>
+          </div>
+        </div>
+        <div class="tdah-tip">
+          <div class="tdah-tip-icon">⚡</div>
+          <p>Ritmo recomendado: bloques de 25 min + 5 min de pausa. Construye algo cada sesión aunque sea pequeño. Ver tu web cambiar en vivo es el estímulo que necesitas para seguir.</p>
+        </div>
+        <a class="cta-btn" href="#" onclick="openClaude(1); return false;">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          Ver plan detallado de esta fase con Claude
+        </a>
+      </div>
+    </div>
+
+    <!-- FASE 2 -->
+    <div class="phase" data-phase="2">
+      <div class="phase-header" onclick="togglePhase(this)">
+        <div class="phase-num">2</div>
+        <div class="phase-title-group">
+          <div class="phase-title">Frontend real: JavaScript + interactividad</div>
+          <div class="phase-subtitle">lógica + DOM + primera mini-app</div>
+        </div>
+        <div class="phase-duration">Meses 3–4</div>
+        <div class="phase-toggle">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5.5L8 10.5L13 5.5"/></svg>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="win-box">
+          <div class="win-icon">◆</div>
+          <div class="win-text">
+            <strong>victoria al terminar esta fase</strong>
+            Tu web reacciona cuando el usuario interactúa. Tienes al menos una mini-app publicada: un generador de colores, una calculadora, algo que responde y se mueve.
+          </div>
+        </div>
+        <div class="sprint-grid">
+          <div class="sprint">
+            <div class="sprint-weeks">Semanas 9–10</div>
+            <div class="sprint-name">JavaScript: la lógica</div>
+            <div class="sprint-desc">Variables, funciones, condicionales. No lo memorices: úsalo inmediatamente para hacer que tu web haga algo útil.</div>
+            <div class="tags"><span class="tag">variables</span><span class="tag">funciones</span><span class="tag">eventos</span></div>
+          </div>
+          <div class="sprint">
+            <div class="sprint-weeks">Semanas 11–12</div>
+            <div class="sprint-name">DOM: manipula tu página</div>
+            <div class="sprint-desc">Aprende a cambiar cualquier cosa de tu web con código. Aquí la magia se vuelve completamente visible.</div>
+            <div class="tags"><span class="tag">querySelector</span><span class="tag">click events</span><span class="tag">animaciones</span></div>
+          </div>
+          <div class="sprint">
+            <div class="sprint-weeks">Semanas 13–14</div>
+            <div class="sprint-name">APIs públicas: datos reales</div>
+            <div class="sprint-desc">Conecta tu web a datos del mundo exterior: clima, imágenes, colores. Aquí empieza lo verdaderamente emocionante.</div>
+            <div class="tags"><span class="tag">fetch</span><span class="tag">async/await</span><span class="tag">JSON</span></div>
+          </div>
+          <div class="sprint">
+            <div class="sprint-weeks">Semanas 15–16</div>
+            <div class="sprint-name">Proyecto: mini-app visual</div>
+            <div class="sprint-desc">Combina tu habilidad visual con JS. Un generador de paletas, un explorador tipográfico, algo que use tu ojo de diseñador.</div>
+            <div class="tags"><span class="tag">proyecto real</span><span class="tag">CSS + JS</span><span class="tag">publicado</span></div>
+          </div>
+        </div>
+        <div class="tdah-tip">
+          <div class="tdah-tip-icon">⚡</div>
+          <p>Mejor recurso para esta fase: javascript.info o The Odin Project. Tienen ejercicios integrados donde ves el resultado inmediatamente. Evita tutoriales de más de 20 minutos sin práctica activa.</p>
+        </div>
+        <a class="cta-btn" href="#" onclick="openClaude(2); return false;">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          Ver plan detallado de esta fase con Claude
+        </a>
+      </div>
+    </div>
+
+    <!-- FASE 3 -->
+    <div class="phase" data-phase="3">
+      <div class="phase-header" onclick="togglePhase(this)">
+        <div class="phase-num">3</div>
+        <div class="phase-title-group">
+          <div class="phase-title">Fullstack: React + backend básico</div>
+          <div class="phase-subtitle">React · Node.js · base de datos · app completa</div>
+        </div>
+        <div class="phase-duration">Meses 5–9</div>
+        <div class="phase-toggle">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5.5L8 10.5L13 5.5"/></svg>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="win-box">
+          <div class="win-icon">◆</div>
+          <div class="win-text">
+            <strong>victoria al terminar esta fase</strong>
+            Tienes una aplicación web completa: frontend en React, backend con Node.js, base de datos, y usuarios que pueden registrarse. Tu primer producto real.
+          </div>
+        </div>
+        <div class="sprint-grid">
+          <div class="sprint">
+            <div class="sprint-weeks">Mes 5</div>
+            <div class="sprint-name">React: componentes</div>
+            <div class="sprint-desc">React es HTML con superpoderes. Aprende a pensar en piezas reutilizables, como si fueran componentes de un sistema de diseño.</div>
+            <div class="tags"><span class="tag">componentes</span><span class="tag">useState</span><span class="tag">props</span></div>
+          </div>
+          <div class="sprint">
+            <div class="sprint-weeks">Mes 6</div>
+            <div class="sprint-name">Node.js + Express</div>
+            <div class="sprint-desc">El backend es el servidor invisible detrás de toda app. Aprende a crear endpoints que tu frontend pueda llamar.</div>
+            <div class="tags"><span class="tag">rutas</span><span class="tag">APIs REST</span><span class="tag">JSON</span></div>
+          </div>
+          <div class="sprint">
+            <div class="sprint-weeks">Mes 7</div>
+            <div class="sprint-name">Base de datos</div>
+            <div class="sprint-desc">SQL básico. Aprende a guardar y recuperar datos. Sin esto, tu app olvida todo cuando la recargas.</div>
+            <div class="tags"><span class="tag">SQL</span><span class="tag">CRUD</span><span class="tag">Supabase</span></div>
+          </div>
+          <div class="sprint">
+            <div class="sprint-weeks">Meses 8–9</div>
+            <div class="sprint-name">Proyecto fullstack completo</div>
+            <div class="sprint-desc">Un generador de portafolios, una plataforma de proyectos de diseño, un SaaS mínimo. Algo que te importe construir.</div>
+            <div class="tags"><span class="tag">auth</span><span class="tag">deploy</span><span class="tag">Vercel</span></div>
+          </div>
+        </div>
+        <div class="tdah-tip">
+          <div class="tdah-tip-icon">⚡</div>
+          <p>Esta es la fase más larga. Cada mes tiene su mini-proyecto para que nunca pases más de 2 semanas sin ver resultados. Si te atascas más de 2 días en algo, usa Claude para desbloquearte y sigue adelante.</p>
+        </div>
+        <a class="cta-btn" href="#" onclick="openClaude(3); return false;">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          Ver plan detallado de esta fase con Claude
+        </a>
+      </div>
+    </div>
+
+    <!-- FASE 4 -->
+    <div class="phase" data-phase="4">
+      <div class="phase-header" onclick="togglePhase(this)">
+        <div class="phase-num">4</div>
+        <div class="phase-title-group">
+          <div class="phase-title">IA integrada: tu ventaja competitiva</div>
+          <div class="phase-subtitle">APIs de LLMs · RAG · producto con IA propio</div>
+        </div>
+        <div class="phase-duration">Meses 10–14</div>
+        <div class="phase-toggle">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5.5L8 10.5L13 5.5"/></svg>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="win-box">
+          <div class="win-icon">◆</div>
+          <div class="win-text">
+            <strong>victoria al terminar esta fase</strong>
+            Tienes al menos un producto con IA funcionando y publicado: un chatbot sobre documentos, un generador creativo, o una herramienta que usa LLMs. Esto ya es vendible.
+          </div>
+        </div>
+        <div class="sprint-grid">
+          <div class="sprint">
+            <div class="sprint-weeks">Meses 10–11</div>
+            <div class="sprint-name">APIs de IA</div>
+            <div class="sprint-desc">Aprende a integrar Claude, OpenAI u otros desde tu backend. Un prompt bien construido ya es el núcleo de un producto.</div>
+            <div class="tags"><span class="tag">API calls</span><span class="tag">prompt engineering</span><span class="tag">streaming</span></div>
+          </div>
+          <div class="sprint">
+            <div class="sprint-weeks">Mes 12</div>
+            <div class="sprint-name">RAG básico</div>
+            <div class="sprint-desc">Haz que la IA responda sobre documentos específicos. Es la tecnología detrás de la mayoría de herramientas B2B de IA.</div>
+            <div class="tags"><span class="tag">embeddings</span><span class="tag">vectores</span><span class="tag">contexto</span></div>
+          </div>
+          <div class="sprint">
+            <div class="sprint-weeks">Meses 13–14</div>
+            <div class="sprint-name">Tu herramienta IA propia</div>
+            <div class="sprint-desc">Diseño + código + IA. Un generador de branding, un asistente de diseño, un analizador de portafolios. Algo que nadie más tiene.</div>
+            <div class="tags"><span class="tag">producto completo</span><span class="tag">UX con IA</span><span class="tag">publicado</span></div>
+          </div>
+        </div>
+        <div class="tdah-tip">
+          <div class="tdah-tip-icon">⚡</div>
+          <p>Aquí tu background de comunicación visual es una ventaja enorme. Sabes qué hace que una experiencia con IA se sienta bien o mal. La mayoría de devs no tienen ese ojo y se nota.</p>
+        </div>
+        <a class="cta-btn" href="#" onclick="openClaude(4); return false;">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          Ver plan detallado de esta fase con Claude
+        </a>
+      </div>
+    </div>
+
+    <!-- FASE 5 -->
+    <div class="phase" data-phase="5">
+      <div class="phase-header" onclick="togglePhase(this)">
+        <div class="phase-num">5</div>
+        <div class="phase-title-group">
+          <div class="phase-title">Despegue freelance: primeros clientes</div>
+          <div class="phase-subtitle">portafolio pro · posicionamiento · ingresos reales</div>
+        </div>
+        <div class="phase-duration">Meses 15–18</div>
+        <div class="phase-toggle">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5.5L8 10.5L13 5.5"/></svg>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="win-box">
+          <div class="win-icon">◆</div>
+          <div class="win-text">
+            <strong>victoria al terminar esta fase</strong>
+            Has cobrado dinero real por desarrollo. Tienes 3–5 proyectos publicados, perfil en plataformas freelance, y sabes comunicar tu valor único: diseño + código + IA.
+          </div>
+        </div>
+        <div class="sprint-grid">
+          <div class="sprint">
+            <div class="sprint-weeks">Mes 15</div>
+            <div class="sprint-name">Portafolio profesional</div>
+            <div class="sprint-desc">Refina tus mejores 3–4 proyectos. Cada uno con el problema, tu proceso y el resultado. Como un case study de diseño.</div>
+            <div class="tags"><span class="tag">case studies</span><span class="tag">README</span><span class="tag">demos en vivo</span></div>
+          </div>
+          <div class="sprint">
+            <div class="sprint-weeks">Meses 16–17</div>
+            <div class="sprint-name">Primeros clientes</div>
+            <div class="sprint-desc">Freelancers de diseño que ya conoces, agencias, startups. Tu combo diseño + dev + IA es raro y tiene precio premium.</div>
+            <div class="tags"><span class="tag">red de contactos</span><span class="tag">propuestas</span><span class="tag">Upwork</span></div>
+          </div>
+          <div class="sprint">
+            <div class="sprint-weeks">Mes 18</div>
+            <div class="sprint-name">Especialización e iteración</div>
+            <div class="sprint-desc">Los primeros clientes enseñan más que cualquier curso. Itera, sube precios, define tu nicho con más precisión.</div>
+            <div class="tags"><span class="tag">feedback real</span><span class="tag">nicho</span><span class="tag">precio justo</span></div>
+          </div>
+        </div>
+        <div class="tdah-tip">
+          <div class="tdah-tip-icon">⚡</div>
+          <p>Tu nombre como diseñador ya existe. No empiezas de cero: ofreces un servicio ampliado. "Antes hacía el diseño, ahora también puedo construirlo" es una propuesta muy poderosa en el mercado actual.</p>
+        </div>
+        <a class="cta-btn" href="#" onclick="openClaude(5); return false;">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          Ver plan detallado de esta fase con Claude
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="save-note">
+    guarda este archivo · ábrelo en cualquier navegador · tu progreso se guarda automáticamente en este dispositivo
+  </div>
+
+</div>
+
+<script>
+// ── PHASE TOGGLE ──
+function togglePhase(header) {
+  const phase = header.closest('.phase');
+  const isActive = phase.classList.contains('active');
+  document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+  if (!isActive) phase.classList.add('active');
+}
+
+// ── WEEK DOTS ──
+const TOTAL_WEEKS = 72;
+const dotsContainer = document.getElementById('week-dots');
+const progressFill = document.getElementById('progress-fill');
+const progressPct = document.getElementById('progress-pct');
+
+const phaseColors = ['#7c3aed','#7c3aed','#059669','#059669','#ea580c','#ea580c','#ea580c','#ea580c','#ea580c','#2563eb','#2563eb','#2563eb','#2563eb','#2563eb','#d97706','#d97706','#d97706','#d97706'];
+const phaseWeeks = [8,8,8,8,8,20,20,20,20,20,20,20,20,20,20,20,20,20];
+
+let done = JSON.parse(localStorage.getItem('roadmap_weeks') || '[]');
+
+function renderDots() {
+  dotsContainer.innerHTML = '';
+  let phaseIdx = 0;
+  let weekInPhase = 0;
+  const phaseLimits = [8, 8, 20, 20, 16];
+  let cumulative = 0;
+
+  for (let i = 0; i < TOTAL_WEEKS; i++) {
+    if (i === cumulative + phaseLimits[phaseIdx]) {
+      cumulative += phaseLimits[phaseIdx];
+      phaseIdx++;
+    }
+    const dot = document.createElement('div');
+    dot.className = 'week-dot' + (done.includes(i) ? ' done' : '');
+    dot.title = 'Semana ' + (i + 1);
+    const colors = ['#7c3aed','#059669','#ea580c','#2563eb','#d97706'];
+    if (done.includes(i)) {
+      dot.style.background = colors[phaseIdx];
+      dot.style.borderColor = colors[phaseIdx];
+    }
+    dot.addEventListener('click', () => {
+      if (done.includes(i)) {
+        done = done.filter(d => d !== i);
+      } else {
+        done.push(i);
+      }
+      localStorage.setItem('roadmap_weeks', JSON.stringify(done));
+      renderDots();
+    });
+    dotsContainer.appendChild(dot);
+  }
+
+  const pct = Math.round((done.length / TOTAL_WEEKS) * 100);
+  progressFill.style.width = pct + '%';
+  progressPct.textContent = done.length + ' / ' + TOTAL_WEEKS + ' semanas';
+}
+
+renderDots();
+
+// ── CLAUDE LINKS ──
+const context = `Hola Claude. Soy egresado de comunicación visual aprendiendo programación fullstack + IA desde cero. Tengo TDAH: aprendo mejor haciendo que leyendo, necesito proyectos cortos con resultados visibles en cada sesión de ~1 hora, y me aburro con metodologías tradicionales sin práctica inmediata. Mi ventaja es el background visual: ojo de diseñador, composición, jerarquía. Mi meta es ser freelance (no empleo). Stack: HTML/CSS → JS → React → Node.js → APIs de IA. Roadmap de 18 meses.`;
+
+const phasePrompts = {
+  1: context + `\n\nEstoy en la FASE 1 (Meses 1-2): HTML, CSS y mi primera web. Dame el plan detallado semana a semana con recursos específicos, ejercicios concretos que pueda hacer hoy en ~1 hora, y el proyecto final que voy a publicar. Recuerda que aprendo haciendo y necesito ver resultados en cada sesión.`,
+  2: context + `\n\nEstoy en la FASE 2 (Meses 3-4): JavaScript + interactividad. Dame el plan detallado semana a semana con proyectos pequeños que pueda completar en ~1 hora cada uno. Quiero hacer algo visual que aproveche mi background de diseño.`,
+  3: context + `\n\nEstoy en la FASE 3 (Meses 5-9): Fullstack con React, Node.js y base de datos. Dame el plan detallado mes a mes con mini-proyectos mensuales. También explícame cómo manejar el bloqueo cuando algo no me sale en React, porque es la fase más larga.`,
+  4: context + `\n\nEstoy en la FASE 4 (Meses 10-14): Integración de IA en mis apps. Dame el plan detallado para aprender a usar APIs de LLMs y RAG básico. También dame ideas de productos con IA que combinen mi background de diseño con código, algo que sea diferenciador en el mercado freelance.`,
+  5: context + `\n\nEstoy en la FASE 5 (Meses 15-18): Despegue freelance. Dame una estrategia detallada para conseguir mis primeros clientes como developer con background de diseño y expertise en IA. Cómo me posiciono, dónde busco, cómo armo mis propuestas y cómo comunico mi valor único.`
+};
+
+function openClaude(phase) {
+  const prompt = encodeURIComponent(phasePrompts[phase]);
+  const url = `https://claude.ai/new?q=${prompt}`;
+  window.open(url, '_blank');
+}
+</script>
+</body>
+</html>
